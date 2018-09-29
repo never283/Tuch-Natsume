@@ -75,14 +75,27 @@ public class Tuch : MonoBehaviour {
             }
         
         /// クリック処理.
-        void Click()
+        public void Click()
         {
-            click++;
-            GameObject obj = Instantiate(prefab_sizeup);
-            obj.transform.position = Input.mousePosition;//objの座標をマウス位置にする.
-            obj.transform.SetParent(Canvas.transform);//親をCanvasに指定する.
-            obj.AddComponent<ObjectDestroy>();//ObjectDestroyコンポーネントをobjに加える.
-            countText.text = "Count:" + click;//クリックUI更新.
+
+        GameObject obj = Instantiate(prefab_sizeup);
+        var rectTransform = obj.GetComponent<RectTransform>();
+        var canvasGameRect = Canvas.GetComponent<RectTransform>();
+        obj.transform.SetParent(Canvas.transform);
+
+        var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        var newPos = new Vector2(
+            ((pos.x * canvasGameRect.sizeDelta.x) - (canvasGameRect.sizeDelta.x * 0.5f)),
+            ((pos.y * canvasGameRect.sizeDelta.y) - (canvasGameRect.sizeDelta.y * 0.5f))
+        );
+        rectTransform.position = newPos;
+
+        // click++;
+        //GameObject obj = Instantiate(prefab_sizeup);
+        //obj.transform.position = Input.mousePosition;//objの座標をマウス位置にする.
+        //obj.transform.SetParent(Canvas.transform);//親をCanvasに指定する.
+        //obj.AddComponent<ObjectDestroy>();//ObjectDestroyコンポーネントをobjに加える.
+        countText.text = "Count:" + click;//クリックUI更新.
 
         iTween.PunchScale(Fox, iTween.Hash(
             "x", 20f,
@@ -115,7 +128,7 @@ public class Tuch : MonoBehaviour {
             timer += Time.deltaTime;
             if (destroyTime <= timer)
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
             }
         }
 
