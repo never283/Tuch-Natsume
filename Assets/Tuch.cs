@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+
+
 public class Tuch : MonoBehaviour {
 
 
@@ -25,7 +27,7 @@ public class Tuch : MonoBehaviour {
         Fox = GameObject.Find("Fox");
         Canvas = GameObject.Find("Canvas");
        // messageText = GameObject.Find("MessageText").GetComponent<Text>();
-        countText.text = "Count:" + click;
+        countText.text = "♡" + click;
 
     }
 
@@ -42,7 +44,7 @@ public class Tuch : MonoBehaviour {
                 if (hit.transform.tag == "Fox")
                 {//tagがオブジェクトをクリックしたとき.
                     Click();
-
+                   
                 }
             }
         }
@@ -73,11 +75,11 @@ public class Tuch : MonoBehaviour {
                   //  messageText.text = "何をしておる。さっさと力をよこさんか！";
                 //}
             }
-        
-        /// クリック処理.
-        public void Click()
-        {
 
+    /// クリック処理.
+    public void Click()
+    {
+        click++;
         GameObject obj = Instantiate(prefab_sizeup);
         var rectTransform = obj.GetComponent<RectTransform>();
         var canvasGameRect = Canvas.GetComponent<RectTransform>();
@@ -89,23 +91,21 @@ public class Tuch : MonoBehaviour {
             ((pos.y * canvasGameRect.sizeDelta.y) - (canvasGameRect.sizeDelta.y * 0.5f))
         );
         rectTransform.position = newPos;
+        countText.text = "♡" + click;//クリックUI更新.
 
-        // click++;
-        //GameObject obj = Instantiate(prefab_sizeup);
-        //obj.transform.position = Input.mousePosition;//objの座標をマウス位置にする.
-        //obj.transform.SetParent(Canvas.transform);//親をCanvasに指定する.
-        //obj.AddComponent<ObjectDestroy>();//ObjectDestroyコンポーネントをobjに加える.
-        countText.text = "Count:" + click;//クリックUI更新.
+
+        iTween.PunchRotation(obj, iTween.Hash("z", 360f,"time",0.5f));
 
         iTween.PunchScale(Fox, iTween.Hash(
-            "x", 20f,
-            "y", 20f,
+            "x", 1f,
+            "y", 1f,
             "time", 0.5
             ));
 
+        Destroy(obj, .4f);
+
     }
 
-        
 
         /// <summary>
         /// アプリケーション終了時に呼ばれる.
@@ -117,24 +117,11 @@ public class Tuch : MonoBehaviour {
     }
 
 
-    public class ObjectDestroy : MonoBehaviour
-    {
-
-        float destroyTime = 0.5f;
-        float timer;
-
-        private void Update()
-        {
-            timer += Time.deltaTime;
-            if (destroyTime <= timer)
-            {
-                //Destroy(gameObject);
-            }
-        }
+   
 
 
 
-    }
+    
 
 
 
